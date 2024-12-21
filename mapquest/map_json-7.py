@@ -1,16 +1,18 @@
+# integrated ETA as new feature into application
 import requests
-import urllib.parse 
+import urllib.parse
+from datetime import datetime, timedelta
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "d2OAzEC0bXBe0A6NHl7gBwWqrvTvvjZt"
 
 while True:
     orig = input("Starting Location: ")
-    if orig == "quit" or orig == "q":
+    if orig.lower() in ["quit", "q"]:
         break
     
     dest = input("Destination: ")
-    if dest == "quit" or dest == "q":
+    if dest.lower() in ["quit", "q"]:
         break
 
     # URL for API call
@@ -28,6 +30,17 @@ while True:
         print("Trip Duration: " + json_data["route"]["formattedTime"])
         print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
 
+        # Extract trip duration in hours, minutes, and seconds
+        duration = json_data["route"]["formattedTime"]
+        hours, minutes, seconds = map(int, duration.split(":"))
+        trip_duration = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        
+        # Calculate ETA
+        current_time = datetime.now()
+        eta = current_time + trip_duration
+        print("Current Time: " + current_time.strftime("%Y-%m-%d %H:%M:%S"))
+        print("ETA (Estimated Time of Arrival): " + eta.strftime("%Y-%m-%d %H:%M:%S"))
+        
         print("=============================================")
 
         for each in json_data["route"]["legs"][0]["maneuvers"]:
