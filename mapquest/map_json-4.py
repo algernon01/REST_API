@@ -6,6 +6,9 @@ orig = "Washington, D.C."
 dest = "Baltimore, Md"
 key = "d2OAzEC0bXBe0A6NHl7gBwWqrvTvvjZt"
 
+
+avg_mpg = 25 
+
 while True:
     orig = input("Starting Location: ")
     if orig == "quit" or orig == "q":
@@ -24,8 +27,18 @@ while True:
     if json_status == 0:
         print("API Status: " + str(json_status) + " = A successful route call.\n")
     print("=============================================")
-    print("Directions from " + (orig) + " to " + (dest))
-    print("Trip Duration: " + (json_data["route"]["formattedTime"]))
+    print("Directions from " + orig + " to " + dest)
+    print("Trip Duration: " + json_data["route"]["formattedTime"])
     print("Miles: " + str(json_data["route"]["distance"]))
-    print("Fuel Used (Gal): " + str(json_data["route"]["fuelUsed"]))
+    
+
+    if "fuelUsed" in json_data["route"]:
+        fuel_used = json_data["route"]["fuelUsed"]
+        print("Fuel Used (Gal): " + str(fuel_used))
+    else:
+        
+        distance = json_data["route"]["distance"]
+        fuel_used = distance / avg_mpg  
+        print("Estimated Fuel Used (Gal): " + str(round(fuel_used, 2)))
+    
     print("=============================================")
