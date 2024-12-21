@@ -7,17 +7,20 @@ key = "d2OAzEC0bXBe0A6NHl7gBwWqrvTvvjZt"
 while True:
     orig = input("Starting Location: ")
     if orig == "quit" or orig == "q":
-        break
-    
+        break 
+
     dest = input("Destination: ")
     if dest == "quit" or dest == "q":
         break
 
-    # URL for API call
+
+    avg_mpg = float(input("Enter your vehicle's average miles per gallon (MPG): "))
+
+
     url = main_api + urllib.parse.urlencode({"key": key, "from": orig, "to": dest})
     print("URL: " + url)
-    
-    # Send request and parse response
+
+
     json_data = requests.get(url).json()
     json_status = json_data["info"]["statuscode"]
     
@@ -27,8 +30,16 @@ while True:
         print("Directions from " + orig + " to " + dest)
         print("Trip Duration: " + json_data["route"]["formattedTime"])
         print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
-        print("Fuel Used (Ltr): " + "{:.3f}".format(json_data["route"]["fuelUsed"] * 3.78))  
         print("=============================================")
+
+
+        distance = json_data["route"]["distance"]  
+        fuel_used = distance / avg_mpg  
+
+ 
+        print("Estimated Fuel Used (Gal): " + str(round(fuel_used, 2)))
+        print("=============================================")
+
 
         for each in json_data["route"]["legs"][0]["maneuvers"]:
             print(each["narrative"] + " (" + "{:.2f}".format(each["distance"] * 1.61) + " km)")
@@ -49,3 +60,4 @@ while True:
         print("For Status Code: " + str(json_status) + "; Refer to:")
         print("https://developer.mapquest.com/documentation/directions-api/status-codes")
         print("************************************************************************\n")
+
