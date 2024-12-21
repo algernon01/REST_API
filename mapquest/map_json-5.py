@@ -13,11 +13,9 @@ while True:
     if dest == "quit" or dest == "q":
         break
 
-    # URL for API call
     url = main_api + urllib.parse.urlencode({"key": key, "from": orig, "to": dest})
     print("URL: " + url)
     
-    # Send request and parse response
     json_data = requests.get(url).json()
     json_status = json_data["info"]["statuscode"]
     
@@ -26,26 +24,12 @@ while True:
         print("=============================================")
         print("Directions from " + orig + " to " + dest)
         print("Trip Duration: " + json_data["route"]["formattedTime"])
-        print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
+        print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))   
         print("Fuel Used (Ltr): " + "{:.3f}".format(json_data["route"]["fuelUsed"] * 3.78))  
         print("=============================================")
 
+        # Print directions
         for each in json_data["route"]["legs"][0]["maneuvers"]:
             print(each["narrative"] + " (" + "{:.2f}".format(each["distance"] * 1.61) + " km)")
-            print("=============================================\n")
-    
-    elif json_status == 402:
-        print("**********************************************")
-        print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
-        print("**********************************************\n")
-    
-    elif json_status == 611:
-        print("**********************************************")
-        print("Status Code: " + str(json_status) + "; Missing an entry for one or both locations.")
-        print("**********************************************\n")
-    
-    else:
-        print("************************************************************************")
-        print("For Status Code: " + str(json_status) + "; Refer to:")
-        print("https://developer.mapquest.com/documentation/directions-api/status-codes")
-        print("************************************************************************\n")
+        print("=============================================\n")
+
