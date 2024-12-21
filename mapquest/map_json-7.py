@@ -1,5 +1,7 @@
+# integrated ETA as new feature into application
 import requests
-import urllib.parse 
+import urllib.parse
+from datetime import datetime, timedelta
 
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "d2OAzEC0bXBe0A6NHl7gBwWqrvTvvjZt"
@@ -11,11 +13,11 @@ fuel_price_per_liter = 1.20
 
 while True:
     orig = input("Starting Location: ")
-    if orig == "quit" or orig == "q":
+    if orig.lower() in ["quit", "q"]:
         break
     
     dest = input("Destination: ")
-    if dest == "quit" or dest == "q":
+    if dest.lower() in ["quit", "q"]:
         break
 
     # URL for API call
@@ -31,6 +33,7 @@ while True:
         print("=============================================")
         print("Directions from " + orig + " to " + dest)
         print("Trip Duration: " + json_data["route"]["formattedTime"])
+        Fuel_Cost_Feature
         print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))
         
         # Calculate estimated fuel usage and cost
@@ -40,6 +43,21 @@ while True:
         
         print("Estimated Fuel Usage: " + "{:.2f}".format(estimated_fuel_liters) + " liters")
         print("Estimated Fuel Cost: $ " + "{:.2f}".format(estimated_fuel_cost))
+
+        print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
+
+        # Extract trip duration in hours, minutes, and seconds
+        duration = json_data["route"]["formattedTime"]
+        hours, minutes, seconds = map(int, duration.split(":"))
+        trip_duration = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        
+        # Calculate ETA
+        current_time = datetime.now()
+        eta = current_time + trip_duration
+        print("Current Time: " + current_time.strftime("%Y-%m-%d %H:%M:%S"))
+        print("ETA (Estimated Time of Arrival): " + eta.strftime("%Y-%m-%d %H:%M:%S"))
+        
+        main
         print("=============================================")
 
         for each in json_data["route"]["legs"][0]["maneuvers"]:
