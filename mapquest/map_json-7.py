@@ -27,7 +27,7 @@ while True:
         print("API Status: " + str(json_status) + " = A successful route call.\n")
         print("=============================================")
         print("Directions from " + orig + " to " + dest)
-        print("ETA: " + json_data["route"]["formattedTime"])
+        print("ETA (Estimated Time of Arrival): " + json_data["route"]["formattedTime"])
         print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
 
         # Extract trip duration in hours, minutes, and seconds
