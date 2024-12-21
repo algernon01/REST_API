@@ -6,6 +6,11 @@ from datetime import datetime, timedelta
 main_api = "https://www.mapquestapi.com/directions/v2/route?"
 key = "d2OAzEC0bXBe0A6NHl7gBwWqrvTvvjZt"
 
+# Fuel efficiency in kilometers per liter (e.g., average car efficiency)
+fuel_efficiency_kmpl = 12.0
+# Fuel price in dollars per liter
+fuel_price_per_liter = 1.20
+
 while True:
     orig = input("Starting Location: ")
     if orig.lower() in ["quit", "q"]:
@@ -28,6 +33,17 @@ while True:
         print("=============================================")
         print("Directions from " + orig + " to " + dest)
         print("Trip Duration: " + json_data["route"]["formattedTime"])
+        Fuel_Cost_Feature
+        print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))
+        
+        # Calculate estimated fuel usage and cost
+        distance_km = json_data["route"]["distance"] * 1.6
+        estimated_fuel_liters = distance_km / fuel_efficiency_kmpl
+        estimated_fuel_cost = estimated_fuel_liters * fuel_price_per_liter
+        
+        print("Estimated Fuel Usage: " + "{:.2f}".format(estimated_fuel_liters) + " liters")
+        print("Estimated Fuel Cost: $ " + "{:.2f}".format(estimated_fuel_cost))
+
         print("Kilometers: " + "{:.2f}".format(json_data["route"]["distance"] * 1.6))  
 
         # Extract trip duration in hours, minutes, and seconds
@@ -41,6 +57,7 @@ while True:
         print("Current Time: " + current_time.strftime("%Y-%m-%d %H:%M:%S"))
         print("ETA (Estimated Time of Arrival): " + eta.strftime("%Y-%m-%d %H:%M:%S"))
         
+        main
         print("=============================================")
 
         for each in json_data["route"]["legs"][0]["maneuvers"]:
